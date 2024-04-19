@@ -40,51 +40,62 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 setState(() {});
               },
-              child: Icon(Icons.refresh,color: Colors.black,)),
-          SizedBox(width: 10,)
+              child: Icon(
+                Icons.refresh,
+                color: Colors.black,
+              )),
+          SizedBox(
+            width: 10,
+          )
         ],
       ),
       body: Column(
         children: sDetail.profiledata.map((e) {
-          return InkWell(
-            onTap: () {
-              // Navigator.pushNamed(context, "detail");
-              setState(() {});
-            },
-            child: Container(
-              margin: EdgeInsets.only(top: 10,right: 10,left: 10),
-              padding: EdgeInsets.only(left: 10,right: 10),
-              height: 100,
-              width: double.infinity,
-              color: Colors.black12,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Name: ${e["name"]}",
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      Text(
-                        "GRid:   ${e["grid"]}",
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      Text(
-                        "Standard: ${e["standard"]}",
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ],
-                  ),
-                  InkWell(
-                      onTap: () {
-                        sDetail.profiledata.remove(e);
-                        setState(() {});
-                      },
-                      child: Icon(Icons.delete)),
-                ],
-              ),
+          return Container(
+            margin: EdgeInsets.only(top: 10, right: 10, left: 10),
+            padding: EdgeInsets.only(left: 10, right: 10),
+            height: 100,
+            width: double.infinity,
+            color: Colors.black12,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Name: ${e["name"]}",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    Text(
+                      "GRid:   ${e["grid"]}",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    Text(
+                      "Standard: ${e["standard"]}",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  width: 130,
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, "detail");
+                  },
+                  child: Icon(Icons.edit),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                InkWell(
+                    onTap: () {
+                      sDetail.profiledata.remove(e);
+                      setState(() {});
+                    },
+                    child: Icon(Icons.delete)),
+              ],
             ),
           );
         }).toList(),
