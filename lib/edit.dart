@@ -42,7 +42,7 @@ class _EditPageState extends State<EditPage> {
                     builder: (BuildContext context) {
                       return AlertDialog(
                         title: Text(
-                          'Add Image',
+                          "Add Image",
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
