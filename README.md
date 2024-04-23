@@ -1,16 +1,6 @@
-# strudent_project
+ScreenSorts
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![Screenshot 2024-04-19 143826](https://github.com/Krishm8/strudent_project/assets/148517012/8ec2f4f2-db9a-4350-b8b1-64b4fbdfe600)
+![Screenshot 2024-04-19 143727](https://github.com/Krishm8/strudent_project/assets/148517012/4109bd19-6158-4063-8035-6bb73298cc1c)
+![Screenshot 2024-04-19 143641](https://github.com/Krishm8/strudent_project/assets/148517012/9ab0caea-ca6d-4f70-9d61-eda6d09f1a49)
+![Screenshot 2024-04-19 143613](https://github.com/Krishm8/strudent_project/assets/148517012/9fedc22c-250a-4d97-8f13-4f4270537a07)
