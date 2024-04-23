@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:strudent_project/detail.dart';
+import 'package:strudent_project/edit.dart';
 import 'package:strudent_project/util.dart';
 
 void main() {
@@ -8,21 +12,24 @@ void main() {
       debugShowCheckedModeBanner: false,
       initialRoute: "/",
       routes: {
-        "/": (context) => HomePage(),
-        "detail": (context) => DetailPage(),
+        "/": (context) => Homepage(),
+        "detail": (context) => DetailsPage(),
+        "edit": (context) => EditPage(),
       },
     ),
   );
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class Homepage extends StatefulWidget {
+  const Homepage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<Homepage> createState() => _HomepageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomepageState extends State<Homepage> {
+  String? xF;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,103 +38,239 @@ class _HomePageState extends State<HomePage> {
         title: Text(
           "Student Data",
           style: TextStyle(
-            fontSize: 25,
+            color: Colors.white,
             letterSpacing: 3,
           ),
         ),
-        actions: [
-          InkWell(
-              onTap: () {
-                setState(() {});
-              },
-              child: Icon(
-                Icons.refresh,
-                color: Colors.black,
-              )),
-          SizedBox(
-            width: 10,
-          )
-        ],
       ),
-      body: Column(
-        children: sDetail.profiledata.map((e) {
-          return Container(
-            margin: EdgeInsets.only(top: 10, right: 10, left: 10),
-            padding: EdgeInsets.only(left: 10, right: 10),
-            height: 100,
-            width: double.infinity,
-            color: Colors.black12,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Name: ${e["name"]}",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    Text(
-                      "GRid:   ${e["grid"]}",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    Text(
-                      "Standard: ${e["standard"]}",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ],
+      body: ListView.builder(
+        itemCount: studentList.length,
+        itemBuilder: (context, index) {
+          StudentDetail student = studentList[index];
+          return Card(
+            child: ListTile(
+              leading: InkWell(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text("Change Image"),
+                        actions: [
+                          InkWell(
+                            onTap: () async {
+                              XFile? file = await ImagePicker()
+                                  .pickImage(source: ImageSource.gallery);
+                              if (file != null) {
+                                setState(() {
+                                  xF = file.path;
+                                });
+                              }
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              "Gallery",
+                            ),
+                          ),
+                          SizedBox(width: 5),
+                          InkWell(
+                            onTap: () async {
+                              XFile? file = await ImagePicker()
+                                  .pickImage(source: ImageSource.camera);
+                              if (file != null) {
+                                setState(() {
+                                  xF = file.path;
+                                });
+                              }
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              "Camera",
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                  setState(() {});
+                },
+                child: CircleAvatar(
+                  radius: 28,
+                  backgroundImage:
+                      FileImage(File(xF ?? studentList[index].xFile ?? "")),
                 ),
-                SizedBox(
-                  width: 130,
-                ),
-                InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(context, "detail");
-                  },
-                  child: Icon(Icons.edit),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                InkWell(
-                    onTap: () {
-                      sDetail.profiledata.remove(e);
+              ),
+              title: InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, "edit");
+                },
+                child: Text('Name: ${student.name}'),
+              ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("GR-ID: ${student.grid}"),
+                  Text("Std: ${student.std}"),
+                ],
+              ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          TextEditingController studentNameController =
+                              TextEditingController(
+                                  text: studentList[index].name);
+                          TextEditingController studentGridController =
+                              TextEditingController(
+                                  text: studentList[index].grid);
+                          TextEditingController studentStdController =
+                              TextEditingController(
+                                  text: studentList[index].std);
+                          return AlertDialog(
+                            title: Center(child: Text("Edit Student Profile")),
+                            content: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  CircleAvatar(
+                                    backgroundImage:
+                                        FileImage(File(student.xFile ?? "")),
+                                    radius: 50,
+                                    child: Align(
+                                        alignment: Alignment(1, 1),
+                                        child: InkWell(
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    title: Text("Change Image"),
+                                                    actions: [
+                                                      InkWell(
+                                                        onTap: () async {
+                                                          XFile? file =
+                                                              await ImagePicker()
+                                                                  .pickImage(
+                                                                      source: ImageSource
+                                                                          .gallery);
+                                                          if (file != null) {
+                                                            setState(() {
+                                                              xF = file.path;
+                                                            });
+                                                          }
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Text(
+                                                          "Gallery",
+                                                        ),
+                                                      ),
+                                                      SizedBox(width: 5),
+                                                      InkWell(
+                                                        onTap: () async {
+                                                          XFile? file =
+                                                              await ImagePicker()
+                                                                  .pickImage(
+                                                                      source: ImageSource
+                                                                          .camera);
+                                                          if (file != null) {
+                                                            setState(() {
+                                                              xF = file.path;
+                                                            });
+                                                          }
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Text(
+                                                          "Camera",
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            child: Icon(
+                                              Icons.camera_alt,
+                                              color: Colors.black,
+                                            ))),
+                                  ),
+                                  TextField(
+                                    textInputAction: TextInputAction.next,
+                                    controller: studentNameController,
+                                    decoration:
+                                        InputDecoration(labelText: 'Name'),
+                                  ),
+                                  TextField(
+                                    textInputAction: TextInputAction.next,
+                                    controller: studentGridController,
+                                    decoration:
+                                        InputDecoration(labelText: 'GR-ID'),
+                                  ),
+                                  TextField(
+                                    controller: studentStdController,
+                                    decoration:
+                                        InputDecoration(labelText: 'Std'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text("Cancel"),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    studentList[index].name =
+                                        studentNameController.text;
+                                    studentList[index].grid =
+                                        studentGridController.text;
+                                    studentList[index].std =
+                                        studentStdController.text;
+                                  });
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text("Save"),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    icon: Icon(Icons.edit),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      studentList.removeAt(index);
                       setState(() {});
                     },
-                    child: Icon(Icons.delete)),
-              ],
+                    icon: Icon(Icons.delete),
+                  ),
+                ],
+              ),
             ),
           );
-        }).toList(),
+        },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, "detail");
+        onPressed: () async {
+          final result = await Navigator.pushNamed(context, "detail");
+          if (result != null && result is StudentDetail) {
+            setState(() {
+              studentList.add(result);
+            });
+          }
         },
         child: Icon(Icons.add),
       ),
     );
   }
 }
-
-/*
-Column(
-        children: sDetail.profiledata.map((e) {
-          return Container(
-            margin: EdgeInsets.only(top: 10),
-            height: 100,
-            width: double.infinity,
-            color: Colors.red,
-            child: Column(
-              children: [
-                Text(
-                  sDetail.name ?? "",
-                  style: TextStyle(fontSize: 20),
-                ),
-                Text(e),
-              ],
-            ),
-          );
-        }).toList(),
-      ),
- */
